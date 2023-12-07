@@ -6,7 +6,7 @@ public class Program
     {
         var total = 0;
 
-        var games = GetGames(filename, possibleRed, possibleGreen, possibleBlue);
+        var games = GetGames(filename);
 
         for(var i =0; i < games.Length; i++)
         {
@@ -19,9 +19,27 @@ public class Program
 
         return total;
     }
-    
 
-    public static IReadOnlyCollection<(int red, int green, int blue)>[] GetGames(string filename, int possibleRed, int possibleGreen, int possibleBlue)
+    public static int Part2(string filename)
+    {
+        var total = 0;
+
+        var games = GetGames(filename);
+
+        for(var i =0; i < games.Length; i++)
+        {
+            var game = games[i];
+            var maxRed = game.Max(r => r.red);
+            var maxGreen = game.Max(r => r.green);
+            var maxBlue = game.Max(r => r.blue);
+            var product = maxRed * maxGreen * maxBlue;
+            total += product;
+        }
+
+        return total;
+    }
+    
+    public static IReadOnlyCollection<(int red, int green, int blue)>[] GetGames(string filename)
     {
         var games = new List<IReadOnlyCollection<(int red, int green, int blue)>>();
         
