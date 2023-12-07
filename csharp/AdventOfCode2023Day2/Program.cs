@@ -5,15 +5,33 @@ public class Program
     public static int Part1(string filename, int possibleRed, int possibleGreen, int possibleBlue)
     {
         var total = 0;
+
+        var games = GetGames(filename, possibleRed, possibleGreen, possibleBlue);
+
+        for(var i =0; i < games.Length; i++)
+        {
+            var game = games[i];
+            if(game.All(r=> r.red <= possibleRed && r.green <= possibleGreen && r.blue <= possibleBlue))
+            {
+                total += i + 1;
+            }
+        }
+
+        return total;
+    }
+    
+
+    public static IReadOnlyCollection<(int red, int green, int blue)>[] GetGames(string filename, int possibleRed, int possibleGreen, int possibleBlue)
+    {
+        var games = new List<IReadOnlyCollection<(int red, int green, int blue)>>();
+        
         var lines = File.ReadAllLines(filename);
         foreach (var line in lines)
         {
-            //Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
-            //Game 12: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
             var gameNumber = int.Parse(line.Split(':')[0].Split(' ')[1]);
-            var games = line.Split(':')[1].Split(';');
+            var gameTexts = line.Split(':')[1].Split(';');
             var rounds = new List<(int red, int green, int blue)>();
-            foreach (var game in games)
+            foreach (var game in gameTexts)
             {
                 var red = 0;
                 var green = 0;
@@ -39,10 +57,9 @@ public class Program
                 rounds.Add((red, green, blue));
             }
 
-            if(rounds.All(r=>r.red <= possibleRed && r.green <= possibleGreen && r.blue <= possibleBlue))
-                total += gameNumber;
+            games.Add(rounds);
         }
 
-        return total;
+        return games.ToArray();
     }
 }
