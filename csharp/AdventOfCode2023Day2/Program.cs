@@ -1,0 +1,48 @@
+namespace AdventOfCode2023Day2;
+
+public class Program
+{
+    public static int Part1(string filename, int possibleRed, int possibleGreen, int possibleBlue)
+    {
+        var total = 0;
+        var lines = File.ReadAllLines(filename);
+        foreach (var line in lines)
+        {
+            //Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
+            //Game 12: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
+            var gameNumber = int.Parse(line.Split(':')[0].Split(' ')[1]);
+            var games = line.Split(':')[1].Split(';');
+            var rounds = new List<(int red, int green, int blue)>();
+            foreach (var game in games)
+            {
+                var red = 0;
+                var green = 0;
+                var blue = 0;
+                var colors = game.Split(',');
+                foreach (var color in colors)
+                {
+                    var trimmedColor = color.Trim();
+                    if (trimmedColor.Contains("red"))
+                    {
+                        red = int.Parse(trimmedColor.Split(' ')[0]);
+                    }
+                    else if (trimmedColor.Contains("green"))
+                    {
+                        green = int.Parse(trimmedColor.Split(' ')[0]);
+                    }
+                    else if (trimmedColor.Contains("blue"))
+                    {
+                        blue = int.Parse(trimmedColor.Split(' ')[0]);
+                    }
+                }
+
+                rounds.Add((red, green, blue));
+            }
+
+            if(rounds.All(r=>r.red <= possibleRed && r.green <= possibleGreen && r.blue <= possibleBlue))
+                total += gameNumber;
+        }
+
+        return total;
+    }
+}
