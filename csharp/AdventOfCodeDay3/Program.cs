@@ -100,4 +100,20 @@ public class Program
         var total = groups.Sum(g=>g.Key.number);
         return total;
     }
+    
+    public static int Part2(string fileName)
+    {
+        var info = GetInfo(fileName);
+        var groups = info.GroupBy(n=> (n.symbol, n.symX, n.symY));
+        var total = groups
+            .Where(g => g.Key.symbol == '*' && g.Count() == 2)
+            .Sum(g =>
+            {
+                var values = g.Select(n => n.number).ToArray();
+                var product = values.Aggregate((a, b) => a * b);
+                return product;
+            });
+        
+        return total;
+    }
 }
