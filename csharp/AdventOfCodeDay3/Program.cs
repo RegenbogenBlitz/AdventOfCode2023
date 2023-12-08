@@ -1,10 +1,13 @@
+using NUnit.Framework.Constraints;
+
 namespace AdventOfCodeDay3;
 
 public class Program
 {
-    public static int Part1(string filename)
+    public static IEnumerable<(int number, int numX, int numY, char symbol, int symX, int symY)> GetInfo(string filename)
     {
-        var total = 0;
+        var info = new List<(int number, int numX, int numY, char symbol, int symX, int symY)>();
+        
         var lines = File.ReadAllLines(filename);
         var lineChars = lines.Select(line => line.ToCharArray()).ToArray();
 
@@ -31,7 +34,6 @@ public class Program
                     
                     var number = int.Parse(new string(lineOfChars, j, numberLength));
 
-                    var anySymbol = false;
                     if(i>0)
                     {
                         var relevantLine = lineChars[i - 1];
@@ -40,10 +42,12 @@ public class Program
                             numberLength +
                             (numberLength + j > 0 ? 1 : 0) +
                             (j + numberLength < relevantLine.Length ? 1 : 0);
-                        var relevantChars = relevantLine.Skip(start).Take(relevantLength).ToArray();
-                        if(relevantChars.Any(c=>!char.IsDigit(c) && c != '.'))
+                        for(var k = start; k < start + relevantLength; k++)
                         {
-                            anySymbol = true;
+                            if(!char.IsDigit(relevantLine[k]) && relevantLine[k] != '.')
+                            {
+                                info.Add((number, j, i, relevantLine[k], k, i - 1));
+                            }
                         }
                     }
 
@@ -51,7 +55,7 @@ public class Program
                     {
                         if(!char.IsDigit(lineOfChars[j-1]) && lineOfChars[j-1] != '.')
                         {
-                            anySymbol = true;
+                            info.Add((number, j, i, lineOfChars[j-1], j-1, i));
                         }
                     }
                     
@@ -59,7 +63,7 @@ public class Program
                     {
                         if(!char.IsDigit(lineOfChars[j+numberLength]) && lineOfChars[j+numberLength] != '.')
                         {
-                            anySymbol = true;
+                            info.Add((number, j, i, lineOfChars[j+numberLength], j+numberLength, i));
                         }
                     }
                    
@@ -71,23 +75,29 @@ public class Program
                             numberLength +
                             (numberLength + j > 0 ? 1 : 0) +
                             (j + numberLength < relevantLine.Length ? 1 : 0);
-                        var relevantChars = relevantLine.Skip(start).Take(relevantLength).ToArray();
-                        if(relevantChars.Any(c=>!char.IsDigit(c) && c != '.'))
+                        for(var k = start; k < start + relevantLength; k++)
                         {
-                            anySymbol = true;
+                            if(!char.IsDigit(relevantLine[k]) && relevantLine[k] != '.')
+                            {
+                                info.Add((number, j, i, relevantLine[k], k, i + 1));
+                            }
                         }
                     }
 
-                    if (anySymbol)
-                    {
-                        total += number;
-                    }
                     j += numberLength - 1;
                 }
 
             }
         }
 
+        return info;
+    }
+
+    public static int Part1(string fileName)
+    {
+        var info = GetInfo(fileName);
+        var groups = info.GroupBy(n=> (n.number, n.numX, n.numY));
+        var total = groups.Sum(g=>g.Key.number);
         return total;
     }
 }

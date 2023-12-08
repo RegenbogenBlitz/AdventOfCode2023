@@ -5,7 +5,7 @@ public class Tests
     [Test]
     public void Part1Example()
     {
-        var total = Program.Part1("example1.txt");
+        var total = Program.Part1("example.txt");
         
         Assert.That(total, Is.EqualTo(4361));
     }
