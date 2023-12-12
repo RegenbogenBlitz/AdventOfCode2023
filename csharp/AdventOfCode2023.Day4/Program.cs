@@ -1,3 +1,5 @@
+using System.Collections;
+
 namespace AdventOfCode2023.Day4;
 
 public class Program
@@ -11,6 +13,31 @@ public class Program
             var matchingNumberCount = matchingNumbers.Length;
             return matchingNumberCount == 0 ? 0 : (int)Math.Pow(2, matchingNumberCount - 1);
         });
+    }
+    
+    public static int Part2(string filename)
+    {
+        var cards = GetCards(filename);
+        var total = cards.Count;
+        var cardReference = cards.ToDictionary(c=> c.Number, c=> c);
+        var cardsToProcess = new Queue<Card>(cards.ToArray());
+        while (cardsToProcess.Count > 0)
+        {
+            var card = cardsToProcess.Dequeue();
+            var matchingNumbers = card.WinningNumbers.Intersect(card.ActualNumbers).ToArray();
+            var matchingNumberCount = matchingNumbers.Length;
+            
+            for(var i = card.Number + 1; i <= card.Number+matchingNumberCount; i++)
+            {
+                if (cardReference.ContainsKey(i))
+                {
+                    cardsToProcess.Enqueue(cardReference[i]);
+                    total++;
+                }
+            }
+        }
+
+        return total;
     }
     
     public static IReadOnlyCollection<Card> GetCards(string filename)
