@@ -1,21 +1,21 @@
-namespace AdventOfCodeDay3;
+namespace AdventOfCode2023.Day2;
 
 public class Tests
 {
     [Test]
     public void Part1Example()
     {
-        var total = Program.Part1("example.txt");
+        var total = Program.Part1("example.txt", 12, 13, 14);
         
-        Assert.That(total, Is.EqualTo(4361));
+        Assert.That(total, Is.EqualTo(8));
     }
     
     [Test]
     public void Part1Solution()
     {
-        var total = Program.Part1("input.txt");
+        var total = Program.Part1("input.txt", 12, 13, 14);
         
-        Assert.That(total, Is.EqualTo(544664));
+        Assert.That(total, Is.EqualTo(2528));
     }
     
     [Test]
@@ -23,7 +23,7 @@ public class Tests
     {
         var total = Program.Part2("example.txt");
         
-        Assert.That(total, Is.EqualTo(467835));
+        Assert.That(total, Is.EqualTo(2286));
     }
     
     [Test]
@@ -31,6 +31,6 @@ public class Tests
     {
         var total = Program.Part2("input.txt");
         
-        Assert.That(total, Is.EqualTo(84495585));
+        Assert.That(total, Is.EqualTo(67363));
     }
 }

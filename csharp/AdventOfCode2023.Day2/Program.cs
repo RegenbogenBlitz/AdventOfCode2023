@@ -1,4 +1,4 @@
-namespace AdventOfCode2023Day2;
+namespace AdventOfCode2023.Day2;
 
 public class Program
 {

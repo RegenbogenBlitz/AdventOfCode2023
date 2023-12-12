@@ -2,9 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode2023.Day1", "AdventOfCode2023.Day1\AdventOfCode2023.Day1.csproj", "{9EDAA014-35AB-4CF0-912B-844A62ED82DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode2023Day2", "AdventOfCode2023Day2\AdventOfCode2023Day2.csproj", "{CA88DF96-CEDF-4EBE-A221-5C8CFFCB9E6C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode2023.Day2", "AdventOfCode2023.Day2\AdventOfCode2023.Day2.csproj", "{CA88DF96-CEDF-4EBE-A221-5C8CFFCB9E6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCodeDay3", "AdventOfCodeDay3\AdventOfCodeDay3.csproj", "{FF47F66F-1978-40E3-B846-BB491F91E035}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode2023.Day3", "AdventOfCode2023.Day3\AdventOfCode2023.Day3.csproj", "{FF47F66F-1978-40E3-B846-BB491F91E035}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode2023.Day4", "AdventOfCode2023.Day4\AdventOfCode2023.Day4.csproj", "{EA9149F9-A791-4854-8E1D-A5025C3CF01A}"
 EndProject

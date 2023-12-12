@@ -7,6 +7,8 @@
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
+        <AssemblyName>AdventOfCode2023.Day2</AssemblyName>
+        <RootNamespace>AdventOfCode2023.Day2</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

@@ -1,6 +1,4 @@
-using NUnit.Framework.Constraints;
-
-namespace AdventOfCodeDay3;
+namespace AdventOfCode2023.Day3;
 
 public class Program
 {
