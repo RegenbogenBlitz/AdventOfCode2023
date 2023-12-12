@@ -15,6 +15,6 @@ public class Tests
     {
         var total = Program.Part1("input.txt");
         
-        Assert.That(total, Is.EqualTo(0));
+        Assert.That(total, Is.EqualTo(23941));
     }
 }
