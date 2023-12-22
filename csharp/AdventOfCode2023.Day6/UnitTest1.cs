@@ -17,4 +17,20 @@ public class Tests
         
         Assert.That(result, Is.EqualTo(771628));
     }
+    
+    [Test]
+    public void Part2Example()
+    {
+        var result = Program.Part2("example.txt");
+        
+        Assert.That(result, Is.EqualTo(71503));
+    }
+    
+    [Test]
+    public void Part2Solution()
+    {
+        var result = Program.Part2("input.txt");
+        
+        Assert.That(result, Is.EqualTo(27363861));
+    }
 }
