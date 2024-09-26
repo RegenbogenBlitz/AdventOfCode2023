@@ -19,32 +19,14 @@
 })();
 
 const Direction = {
-    Right: 0,
-    Up: 1,
-    Left: 2,
-    Down: 3
+    Start: 0,
+    Right: 1,
+    Up: 2,
+    Left: 3,
+    Down: 4
 };
 
-
-const createNewCell = (maxColumn, maxRow, x, y, cost) => {
-    const createPossibleDirections = (direction, distance) => {
-        const possibleDirections = [];
-        if (y != maxRow && !(direction == Direction.Down && distance >= 3) && direction != Direction.Up) {
-            possibleDirections.push(Direction.Down);
-        }
-        if (y != 0 && !(direction == Direction.Up && distance >= 3) && direction != Direction.Down) {
-            possibleDirections.push(Direction.Up);
-        }
-        if (x != maxColumn && !(direction == Direction.Right && distance >= 3) && direction != Direction.Left) {
-            possibleDirections.push(Direction.Right);
-        }
-        if (x != 0 && !(direction == Direction.Left && distance >= 3) && direction != Direction.Right) {
-            possibleDirections.push(Direction.Left);
-        }
-
-        return possibleDirections;
-    }
-
+const createCreateNewCell = (createStates) => (x, y, cost) => {
     const states = [];
     const cell = {
         x: x,
@@ -53,67 +35,104 @@ const createNewCell = (maxColumn, maxRow, x, y, cost) => {
         states: states
     };
 
-    const createState = (direction, distance) => ({
+    const createState = (createPossibleDirections) => (direction, distance) => ({
         cell: cell,
         direction: direction,
         distance: distance,
         minValue: null,
         fromState: null,
         directions: createPossibleDirections(direction, distance),
-        nextStates: null,
+        nextStates: [],
         bestPath: null
     })
 
-    if (y == 0 && x == 0) {
-        states.push(createState(Direction.Down, 0));
-    }
-    if (y > 0) {
-        states.push(createState(Direction.Down, 1));
-    }
-    if (y > 1) {
-        states.push(createState(Direction.Down, 2));
-    }
-    if (y > 2) {
-        states.push(createState(Direction.Down, 3));
-    }
-
-    if (y < maxRow) {
-        states.push(createState(Direction.Up, 1));
-    }
-    if (y < maxRow - 1) {
-        states.push(createState(Direction.Up, 2));
-    }
-    if (y < maxRow - 2) {
-        states.push(createState(Direction.Up, 3));
-    }
-
-
-    if (x > 0) {
-        states.push(createState(Direction.Right, 1));
-    }
-    if (x > 1) {
-        states.push(createState(Direction.Right, 2));
-    }
-    if (x > 2) {
-        states.push(createState(Direction.Right, 3));
-    }
-
-
-    if (x < maxColumn) {
-        states.push(createState(Direction.Left, 1));
-    }
-    if (x < maxColumn - 1) {
-        states.push(createState(Direction.Left, 2));
-    }
-    if (x < maxColumn - 2) {
-        states.push(createState(Direction.Left, 3));
-    }
-
+    createStates(createState, states, x, y);
 
     return cell;
 }
 
-const day17_run = () => {
+const generalCreateStates = (minDistance, maxDistance) => (maxColumn, maxRow) => (createCreateState, states, x, y) => {
+    const createPossibleDirections = (direction, distance) => {
+        const possibleDirections = [];
+        if (y != maxRow &&
+            !(direction == Direction.Down && distance >= maxDistance) &&
+            !(direction == Direction.Left && distance < minDistance) &&
+            !(direction == Direction.Right && distance < minDistance) &&
+            direction != Direction.Up) {
+            possibleDirections.push(Direction.Down);
+        }
+        if (y != 0 &&
+            !(direction == Direction.Up && distance >= maxDistance) &&
+            !(direction == Direction.Left && distance < minDistance) &&
+            !(direction == Direction.Right && distance < minDistance) &&
+            direction != Direction.Down) {
+            possibleDirections.push(Direction.Up);
+        }
+        if (x != maxColumn &&
+            !(direction == Direction.Right && distance >= maxDistance) &&
+            !(direction == Direction.Up && distance < minDistance) &&
+            !(direction == Direction.Down && distance < minDistance) &&
+            direction != Direction.Left) {
+            possibleDirections.push(Direction.Right);
+        }
+        if (x != 0 &&
+            !(direction == Direction.Left && distance >= maxDistance) &&
+            !(direction == Direction.Up && distance < minDistance) &&
+            !(direction == Direction.Down && distance < minDistance) &&
+            direction != Direction.Right) {
+            possibleDirections.push(Direction.Left);
+        }
+
+        return possibleDirections;
+    }
+
+    const createState = createCreateState(createPossibleDirections);
+
+    if (y == 0 && x == 0) {
+        states.push(createState(Direction.Start, 0));
+    }
+
+    for (let i = 0; i < maxDistance; i++) {
+        if (y > i) {
+            states.push(createState(Direction.Down, i + 1));
+        }
+    }
+
+    for (let i = 0; i < maxDistance; i++) {
+        if (y < maxRow - i) {
+            states.push(createState(Direction.Up, i + 1));
+        }
+    }
+
+    for (let i = 0; i < maxDistance; i++) {
+        if (x > i) {
+            states.push(createState(Direction.Right, i + 1));
+        }
+    }
+
+    for (let i = 0; i < maxDistance; i++) {
+        if (x < maxColumn - i) {
+            states.push(createState(Direction.Left, i + 1));
+        }
+    }
+}
+
+
+const day17_part1 = () => {
+    const minDistance = 1;
+    const maxDistance = 3;
+
+    day17_run(generalCreateStates(minDistance, maxDistance));
+}
+
+const day17_part2 = () => {
+    const minDistance = 4;
+    const maxDistance = 10;
+
+    day17_run(generalCreateStates(minDistance, maxDistance));
+}
+
+const day17_run = (createStates) => {
     const output = document.querySelector('#output');
     output.innerHTML = '';
 
@@ -132,12 +151,14 @@ const day17_run = () => {
     const maxRow = numRows - 1;
 
     // Create the cells
+    const createNewCell = createCreateNewCell(createStates(maxColumn, maxRow));
+
     const cells = [];
     for (let y = 0; y < numRows; y++) {
         cells.push([]);
         for (let x = 0; x < numColumns; x++) {
             const cellCost = parseInt(lines[y][x]);
-            const cell = createNewCell(maxColumn, maxRow, x, y, cellCost);
+            const cell = createNewCell(x, y, cellCost);
             cells[y].push(cell);
         }
     }
@@ -219,7 +240,7 @@ const day17_run = () => {
 
     // Find the shortest path
     const startCell = cells[0][0];
-    const startState = startCell.states.find(s => s.direction == Direction.Down && s.distance == 0);
+    const startState = startCell.states.find(s => s.direction == Direction.Start && s.distance == 0);
     startState.bestPath = [startState];
     startState.minValue = 0;
 
@@ -228,6 +249,10 @@ const day17_run = () => {
 
     while (queue.length > 0) {
         const state = queue.shift();
+
+        if (state.nextStates == null) {
+            const dummy = 0;
+        }
 
         for (let i = 0; i < state.nextStates.length; i++) {
             const nextState = state.nextStates[i];
